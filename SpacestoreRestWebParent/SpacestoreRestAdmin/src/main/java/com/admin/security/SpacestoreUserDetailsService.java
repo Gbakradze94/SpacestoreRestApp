@@ -21,4 +21,6 @@ public class SpacestoreUserDetailsService implements UserDetailsService {
         throw new UsernameNotFoundException("Could not find user with email: " + email);
 
     }
+
+
 }

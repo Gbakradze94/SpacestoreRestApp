@@ -1,9 +1,11 @@
-package com.admin.controller;
+package com.admin.api;
 
-import com.admin.service.UserServiceImpl;
+import com.admin.service.UserService;
 import com.spacestore.common.dto.UserDto;
 import com.spacestore.common.entity.User;
 import com.spacestore.common.exception.UserNotFoundException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,54 +18,60 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin("*")
+@CrossOrigin
 @RestController
+@RequestMapping(value = "/api")
+@Api(tags = {"Authentication"})
 public class UserController {
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UserService userService;
 
-    @GetMapping("/users")
+
+
+
+    @ApiOperation(value = "Gets all users from database.")
+    @GetMapping(value = "/users")
     public ResponseEntity<List<UserDto>> getUsers(){
-        return new ResponseEntity<>(userServiceImpl.getAllUsers(),HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);
     }
 
 
     @GetMapping("/usersbypage")
     public ResponseEntity<List<UserDto>> getUsersByPage(@RequestParam Integer pageNumber,
                                                @RequestParam Integer pageSize){
-        return new ResponseEntity<>(userServiceImpl.getUsersByPage(pageNumber,pageSize),HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUsersByPage(pageNumber,pageSize),HttpStatus.OK);
     }
 
 
     @GetMapping("/users/{id}")
     public ResponseEntity<Optional<User>> getUser(@PathVariable("id") Integer id) throws UserNotFoundException {
-        return new ResponseEntity<>(userServiceImpl.getUser(id),HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUser(id),HttpStatus.OK);
     }
 
 
     @PostMapping("/users")
     public ResponseEntity<User> saveUser(@Valid @RequestBody UserDto userDto) {
-        return new ResponseEntity<>(userServiceImpl.saveUser(userDto),HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.saveUser(userDto),HttpStatus.CREATED);
     }
 
-
+    @ApiOperation(value = "Updates user details")
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody UserDto userDto){
         userDto.setId(id);
-        return new ResponseEntity<>(userServiceImpl.updateUser(userDto),HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.updateUser(userDto),HttpStatus.CREATED);
     }
 
-
+    @ApiOperation(value = "Deletes the user from database by id.")
     @DeleteMapping("/users")
     public ResponseEntity<HttpStatus> deleteUser(@RequestParam("id") Integer id) {
-        userServiceImpl.deleteUser(id);
+        userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/users/filterByEmail")
     public ResponseEntity<List<UserDto>> getUsersByEmail(@RequestParam String email){
-        return new ResponseEntity<>(userServiceImpl.findUsersByEmail(email),HttpStatus.OK);
+        return new ResponseEntity<>(userService.findUsersByEmail(email),HttpStatus.OK);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)

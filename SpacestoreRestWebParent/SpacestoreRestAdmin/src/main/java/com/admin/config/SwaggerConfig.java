@@ -34,7 +34,7 @@ public class SwaggerConfig {
                 .securitySchemes(newArrayList(apiKey()))
                 .select().paths(PathSelectors.any())
                 //.apis(RequestHandlerSelectors.any())  // If you want to list all the apis including springboots own
-                .apis(RequestHandlerSelectors.basePackage("com.app.api"))
+                .apis(RequestHandlerSelectors.basePackage("com.admin.api"))
                 .build()
                 .pathMapping("/")
                 .useDefaultResponseMessages(false)
