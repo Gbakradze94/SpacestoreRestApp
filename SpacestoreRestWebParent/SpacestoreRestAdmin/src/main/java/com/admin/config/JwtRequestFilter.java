@@ -1,7 +1,7 @@
 package com.admin.config;
 
 import com.admin.service.JwtService;
-import com.admin.util.JwtUtil;
+import com.admin.util.jwt.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

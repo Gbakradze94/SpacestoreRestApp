@@ -35,6 +35,17 @@ public class User extends IdBasedEntity {
     @NotBlank(message = "Lastname should not be null nor empty or blank")
     private String lastName;
 
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
     @Column(length = 64)
     private String photos;
 

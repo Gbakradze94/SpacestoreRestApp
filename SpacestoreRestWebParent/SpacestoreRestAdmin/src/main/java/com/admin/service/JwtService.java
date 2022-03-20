@@ -1,7 +1,7 @@
 package com.admin.service;
 
 import com.admin.repository.UserRepository;
-import com.admin.util.JwtUtil;
+import com.admin.util.jwt.JwtUtil;
 import com.spacestore.common.entity.JwtRequest;
 import com.spacestore.common.entity.JwtResponse;
 import com.spacestore.common.entity.User;
