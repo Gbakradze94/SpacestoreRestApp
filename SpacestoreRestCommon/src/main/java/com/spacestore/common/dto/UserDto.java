@@ -23,7 +23,6 @@ public class UserDto {
 
     private String lastName;
 
-    private String verificationCode;
     private String photos;
 
     private boolean enabled;

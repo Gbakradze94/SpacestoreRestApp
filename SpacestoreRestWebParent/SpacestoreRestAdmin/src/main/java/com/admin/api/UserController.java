@@ -86,36 +86,12 @@ public class UserController {
 
 
     @PostMapping("/users/register")
-    public User registerUser(@RequestBody UserDto user, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
-        sendVerificationEmail(user, request);
-        return userService.registerUser(user);
+    public ResponseEntity<HttpStatus> registerUser(@RequestBody UserDto user, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
+        userService.registerUser(user);
+        userService.sendVerificationEmail(user, request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    private void sendVerificationEmail(UserDto user, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
-        EmailSettingBag emailSettings = settingService.getEmailSettings();
-        JavaMailSenderImpl mailSender = SettingsUtil.prepareMailSender(emailSettings);
-
-        String toAddress = user.getEmail();
-        String subject = emailSettings.getUserVerifySubject();
-        String content = emailSettings.getUserVerifyContent();
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(emailSettings.getFromAddress(),emailSettings.getSenderName());
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
-
-        content = content.replace("[[name]]",user.getFirstName());
-
-        String verifyURL = SettingsUtil.getSiteURL(request) + "/verify?code=" + user.getVerificationCode();
-
-        content = content.replace("[[URL]]",verifyURL);
-
-        helper.setText(content, true);
-
-        mailSender.send(message);
-
-    }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -128,5 +104,11 @@ public class UserController {
             errors.put(fieldName, message);
         });
         return errors;
+    }
+
+    // For test demo
+    @GetMapping("/hello")
+    public String greet() {
+        return "Hello";
     }
 }
